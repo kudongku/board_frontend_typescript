@@ -3,14 +3,17 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import instance from '../utils/axios';
-import { PostList } from '@/types/models';
+import { PostListResponseDto } from '@/types/models';
 import PostThumbnail from '@/components/PostThumbnail';
+import Pagination from '@/components/Pagination';
 
 const Home: React.FC = () => {
-  const [postList, setPostList] = useState<PostList | null>(null);
+  const [postList, setPostList] = useState<PostListResponseDto[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [postsPerPage, setPostsPerPage] = useState<number>(10);
+  const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
+  const pagesPerGroup = 10;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -29,20 +32,44 @@ const Home: React.FC = () => {
     fetchPosts();
   }, [currentPage, postsPerPage]);
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageGroupChange = (direction: number) => {
+    const newPageGroup = currentPageGroup + direction;
+    if (newPageGroup >= 0 && newPageGroup * pagesPerGroup < totalPages) {
+      setCurrentPageGroup(newPageGroup);
+      setCurrentPage(Math.max(currentPage, newPageGroup * pagesPerGroup));
+    }
+  };
+
+  const handlePostsPerPageChange = (num: number) => {
+    setPostsPerPage(num);
+    setCurrentPage(0);
+  };
+
   return (
     <div>
-      {postList ? (
-        <div className="w-full max-w-4xl space-y-4">
-          {postList.map((postListResponseDto) => (
-            <PostThumbnail
-              key={postListResponseDto.postId}
-              postListResponseDto={postListResponseDto}
-            />
-          ))}
-        </div>
-      ) : (
-        <p>게시물이 존재하지 않습니다. 게시물을 등록해주세요.</p>
-      )}
+      <div className="w-full max-w-4xl space-y-4">
+        {postList.map((postListResponseDto) => (
+          <PostThumbnail
+            key={postListResponseDto.postId}
+            postListResponseDto={postListResponseDto}
+          />
+        ))}
+      </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        currentPageGroup={currentPageGroup}
+        pagesPerGroup={pagesPerGroup}
+        postsPerPage={postsPerPage}
+        onPageChange={handlePageChange}
+        onPageGroupChange={handlePageGroupChange}
+        onPostsPerPageChange={handlePostsPerPageChange}
+      />
     </div>
   );
 };

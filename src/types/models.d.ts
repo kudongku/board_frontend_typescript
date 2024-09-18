@@ -4,5 +4,3 @@ export interface PostListResponseDto {
   username: string;
   createdAt: string;
 }
-
-export type PostList = PostListResponseDto[];
