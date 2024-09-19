@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import instance from '@/utils/axios';
 import { PostDetailResponseDto } from '@/types/models';
+import Buttons from '@/components/Buttons';
 
 interface DetailProps {
   params: {
@@ -13,7 +14,7 @@ interface DetailProps {
 
 const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
   const router = useRouter();
-  const postId: Number = params.postId;
+  const postId: number = params.postId;
   const [post, setPost] = useState<PostDetailResponseDto | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -66,7 +67,7 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
       <p className="text-gray-700 mb-4">작성자: {post.username}</p>
-      {/* <Buttons postId={postId} /> */}
+      <Buttons postId={postId} />
       <div>
         {fileUrl && (
           <a
