@@ -4,3 +4,11 @@ export interface PostListResponseDto {
   username: string;
   createdAt: string;
 }
+
+export interface PostDetailResponseDto {
+  title: string;
+  content: string;
+  username: string;
+  createdAt: string;
+  hasFile: boolean;
+}
