@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import instance from '@/utils/axios';
 import { PostDetailResponseDto } from '@/types/models';
 import Buttons from '@/components/Buttons';
+import CommentBar from '@/components/CommentBar';
 
 interface DetailProps {
   params: {
@@ -81,7 +82,7 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
       </div>
       <p className="text-gray-800 mt-4">{post.content}</p>
       <hr className="my-6 border-gray-300" />
-      {/* <CommentBar postId={postId} /> */}
+      <CommentBar postId={postId} />
     </div>
   );
 };

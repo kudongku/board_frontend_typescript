@@ -12,3 +12,9 @@ export interface PostDetailResponseDto {
   createdAt: string;
   hasFile: boolean;
 }
+
+export interface CommentResponseDto {
+  commentId: number;
+  content: string;
+  writerUsername: string;
+}
