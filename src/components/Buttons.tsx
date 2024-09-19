@@ -18,8 +18,6 @@ const Buttons: React.FC<ButtonsProps> = ({ postId }: ButtonsProps) => {
         console.error('게시물 삭제 중 오류가 발생했습니다.');
       }
     } catch (error: any) {
-      console.error('Error deleting post:', error);
-
       if (error.response?.status === 403) {
         alert('권한이 없어 로그인창으로 이동합니다.');
         router.push('/login');

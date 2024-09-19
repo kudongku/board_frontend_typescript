@@ -32,7 +32,6 @@ const Comment: React.FC<CommentProps> = ({
         alert('댓글 수정 중 오류가 발생했습니다.');
       }
     } catch (error: any) {
-      console.error('댓글 수정 실패:', error);
       if (error.response?.status === 403) {
         alert('권한이 없어 로그인창으로 이동합니다.');
         router.push('/login');
@@ -54,7 +53,6 @@ const Comment: React.FC<CommentProps> = ({
         alert('댓글 삭제 중 오류가 발생했습니다.');
       }
     } catch (error: any) {
-      console.error('댓글 삭제 실패:', error);
       if (error.response?.status === 403) {
         alert('권한이 없어 로그인창으로 이동합니다.');
         router.push('/login');

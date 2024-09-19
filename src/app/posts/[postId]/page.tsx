@@ -51,8 +51,7 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
           alert('권한이 없어 로그인창으로 이동합니다.');
           router.push('/login');
         } else {
-          console.error('Error fetching posts:', error);
-          alert(error.message);
+          alert(error.response?.data || '에러가 발생했습니다.');
         }
       }
     };

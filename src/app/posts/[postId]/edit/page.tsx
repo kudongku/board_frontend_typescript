@@ -48,13 +48,11 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
           setFileName(extractedFileName);
         }
       } catch (error: any) {
-        console.error('Error fetching posts:', error);
-
         if (error.response?.status === 403) {
           alert('권한이 없어 로그인창으로 이동합니다.');
           router.push('/login');
         } else {
-          alert(error.message);
+          alert(error.response?.data || '에러가 발생했습니다.');
         }
       }
     };
@@ -102,9 +100,10 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
       if (error.response?.status === 403) {
         alert('권한이 없어 로그인창으로 이동합니다.');
         router.push('/login');
+      } else {
+        alert(error.response?.data || '에러가 발생했습니다.');
+        router.push(`/posts/${postId}`);
       }
-      console.error('Error submitting post:', error);
-      alert(error.response?.data || 'Unknown error');
     }
   };
 
@@ -119,9 +118,8 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
       } else {
         alert('이미지 삭제 중 오류가 발생했습니다.');
       }
-    } catch (error) {
-      console.error('이미지 삭제 실패:', error);
-      alert('이미지 삭제 실패');
+    } catch (error: any) {
+      alert(error.response?.data || '에러가 발생했습니다.');
     }
   };
 

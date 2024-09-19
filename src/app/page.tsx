@@ -24,7 +24,6 @@ const Home: React.FC = () => {
         setPostList(response.data.content);
         setTotalPages(response.data.totalPages);
       } catch (error: any) {
-        console.error('axios error :', error);
         alert(error.response?.data || '페이지 리스트 조회 중 에러 발생.');
       }
     };

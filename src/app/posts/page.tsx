@@ -48,12 +48,11 @@ const Posting: React.FC = () => {
       alert(response.data);
       router.push('/');
     } catch (error: any) {
-      console.error('요청 실패:', error);
       if (error.response?.status === 403) {
         alert('권한이 없어 로그인창으로 이동합니다.');
         router.push('/login');
       } else {
-        alert('게시글 작성 중 오류가 발생했습니다.');
+        alert(error.response?.data || '에러가 발생했습니다.');
       }
     } finally {
       setLoading(false);

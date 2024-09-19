@@ -23,7 +23,6 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
         setComments(response.data.content);
         setHasNext(!response.data.last);
       } catch (error: any) {
-        console.error('Error fetching posts:', error);
         if (error.response?.status === 403) {
           alert('권한이 없어 로그인창으로 이동합니다.');
           router.push('/login');
@@ -51,7 +50,6 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
         console.error('댓글 생성 중 오류가 발생했습니다.');
       }
     } catch (error: any) {
-      console.error('댓글 생성 실패:', error);
       if (error.response?.status === 403) {
         alert('권한이 없어 로그인창으로 이동합니다.');
         router.push('/login');

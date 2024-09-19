@@ -21,7 +21,6 @@ const Login: React.FC = () => {
         window.location.href = '/';
       }
     } catch (error: any) {
-      console.error('로그인 실패:', error);
       alert(error.response?.data || '에러가 발생했습니다.');
     }
   };

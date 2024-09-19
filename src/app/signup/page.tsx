@@ -25,7 +25,6 @@ const Signup: React.FC = () => {
       alert(response.data);
       router.push(`/login`);
     } catch (error: any) {
-      console.error('회원가입 실패:', error);
       alert(error.response?.data || '회원가입 중 오류가 발생했습니다.');
     }
   };
