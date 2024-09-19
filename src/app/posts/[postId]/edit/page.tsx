@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 import instance from '@/utils/axios';
 import { PostDetailResponseDto } from '@/types/models';
 
-interface HomeProps {
+interface EditPageProps {
   params: {
     postId: number;
   };
 }
 
-export default function Home({ params }: HomeProps) {
+const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
   const router = useRouter();
   const postId: number = params.postId;
   const [post, setPost] = useState<PostDetailResponseDto | null>(null);
@@ -213,4 +213,6 @@ export default function Home({ params }: HomeProps) {
       </form>
     </div>
   );
-}
+};
+
+export default EditPage;

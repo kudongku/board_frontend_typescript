@@ -8,7 +8,7 @@ interface CommentBarProps {
   postId: number;
 }
 
-export default function CommentBar({ postId }: CommentBarProps) {
+const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
   const router = useRouter();
   const [comments, setComments] = useState<CommentResponseDto[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -120,4 +120,6 @@ export default function CommentBar({ postId }: CommentBarProps) {
       </div>
     </div>
   );
-}
+};
+
+export default CommentBar;

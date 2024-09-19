@@ -9,7 +9,11 @@ interface CommentProps {
   onUpdate: () => Promise<void>;
 }
 
-export default function Comment({ comment, postId, onUpdate }: CommentProps) {
+const Comment: React.FC<CommentProps> = ({
+  comment,
+  postId,
+  onUpdate,
+}: CommentProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editText, setEditText] = useState<string>(comment.content);
@@ -105,4 +109,6 @@ export default function Comment({ comment, postId, onUpdate }: CommentProps) {
       )}
     </div>
   );
-}
+};
+
+export default Comment;
