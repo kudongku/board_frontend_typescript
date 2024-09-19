@@ -5,7 +5,7 @@ interface ButtonsProps {
   postId: number;
 }
 
-export default function Buttons({ postId }: ButtonsProps) {
+const Buttons: React.FC<ButtonsProps> = ({ postId }: ButtonsProps) => {
   const router = useRouter();
 
   const handleDeleteClick = async () => {
@@ -47,4 +47,6 @@ export default function Buttons({ postId }: ButtonsProps) {
       </div>
     </div>
   );
-}
+};
+
+export default Buttons;
