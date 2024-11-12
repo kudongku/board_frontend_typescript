@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useEffect, useState } from "react";
-import instance from "../utils/axios";
 import { PostListResponseDto } from "@/types/models";
 import PostThumbnail from "@/components/PostThumbnail";
 import Pagination from "@/components/Pagination";
+import { getPosts } from "@/api/post";
 
 const Home: React.FC = () => {
   const [postList, setPostList] = useState<PostListResponseDto[]>([]);
@@ -18,11 +18,9 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await instance.get(
-          `/posts?page=${currentPage}&size=${postsPerPage}&sort=createdAt,desc`,
-        );
-        setPostList(response.data.content);
-        setTotalPages(response.data.totalPages);
+        const response = await getPosts(currentPage, postsPerPage);
+        setPostList(response.content);
+        setTotalPages(response.totalPages);
       } catch (error: any) {
         alert(error.response?.data || "페이지 리스트 조회 중 에러 발생.");
       }

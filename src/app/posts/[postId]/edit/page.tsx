@@ -2,9 +2,14 @@
 
 import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import instance from "@/utils/axios";
 import { PostDetailResponseDto } from "@/types/models";
-import { getFile, getPostDetail } from "@/api/post";
+import {
+  deleteFile,
+  getFile,
+  getPostDetail,
+  updateFile,
+  updatePost,
+} from "@/api/post";
 
 interface EditPageProps {
   params: {
@@ -29,24 +34,12 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
         setLoading(false);
 
         if (postDetailResponseDto.hasFile) {
-          const fileResponse = getFile(postId);
-          const disposition = fileResponse.headers["content-disposition"];
-          const extractedFileName = disposition
-            ? disposition.split("filename=")[1]
-            : "downloaded_file";
-
-          const fileBlob = fileResponse.data;
-          const fileUrl = URL.createObjectURL(fileBlob);
-          setFileUrl(fileUrl);
-          setFileName(extractedFileName);
+          const fileResponseDto = await getFile(postId);
+          setFileUrl(fileResponseDto.fileUrl);
+          setFileName(fileResponseDto.fileName);
         }
       } catch (error: any) {
-        if (error.response?.status === 403) {
-          alert("권한이 없어 로그인창으로 이동합니다.");
-          router.push("/login");
-        } else {
-          alert(error.response?.data || "에러가 발생했습니다.");
-        }
+        alert(error.response?.data || "에러가 발생했습니다.");
       }
     };
 
@@ -66,53 +59,31 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
       if (imageFile) {
         const imageFormData = new FormData();
         imageFormData.append("postImage", imageFile);
-
-        const imageResponse = await instance.put<{ fileId: number }>(
-          `/posts/${postId}/files`,
-          imageFormData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        );
-
-        if (imageResponse.status === 200) {
-          uploadedFileId = imageResponse.data.fileId;
-        }
+        uploadedFileId = await updateFile(postId, imageFormData);
       }
 
-      await instance.put(`/posts/${postId}`, {
+      await updatePost(postId, {
         title,
         content,
-        fileId: uploadedFileId,
+        uploadedFileId,
       });
 
       router.push(`/posts/${postId}`);
     } catch (error: any) {
-      if (error.response?.status === 403) {
-        alert("권한이 없어 로그인창으로 이동합니다.");
-        router.push("/login");
-      } else {
-        alert(error.response?.data || "에러가 발생했습니다.");
-        router.push(`/posts/${postId}`);
-      }
+      alert(error.response?.data || "에러가 발생했습니다.");
+      router.push(`/posts/${postId}`);
     }
   };
 
   const handleDeleteImage = async () => {
     try {
-      const response = await instance.delete(`/posts/${postId}/files`);
-
-      if (response.status === 200) {
-        setFileUrl(null);
-        setImageFile(null);
-        alert("이미지가 삭제되었습니다.");
-      } else {
-        alert("이미지 삭제 중 오류가 발생했습니다.");
-      }
+      await deleteFile(postId);
+      setFileUrl(null);
+      setImageFile(null);
+      alert("이미지가 삭제되었습니다.");
     } catch (error: any) {
       alert(error.response?.data || "에러가 발생했습니다.");
+      router.push(`/posts/${postId}`);
     }
   };
 

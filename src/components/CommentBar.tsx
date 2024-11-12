@@ -3,6 +3,7 @@ import instance from "@/utils/axios";
 import { useRouter } from "next/navigation";
 import Comment from "./Comment";
 import { CommentResponseDto } from "@/types/models";
+import { createComment, getComments } from "@/api/post";
 
 interface CommentBarProps {
   postId: number;
@@ -17,11 +18,9 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await instance.get(
-          `/posts/${postId}/comments?page=${currentPage}&size=10&sort=createdAt,desc`,
-        );
-        setComments(response.data.content);
-        setHasNext(!response.data.last);
+        const response = await getComments(postId, currentPage);
+        setComments(response.content);
+        setHasNext(!response.last);
       } catch (error: any) {
         if (error.response?.status === 403) {
           alert("권한이 없어 로그인창으로 이동합니다.");
@@ -42,13 +41,10 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
     const data = Object.fromEntries(formData);
 
     try {
-      const response = await instance.post(`/posts/${postId}/comments`, data);
-
-      if (response.status === 200) {
-        setTimeout(() => window.location.reload(), 0);
-      } else {
-        console.error("댓글 생성 중 오류가 발생했습니다.");
-      }
+      const response = await createComment(postId, {
+        content: data.content as string,
+      });
+      setTimeout(() => window.location.reload(), 0);
     } catch (error: any) {
       if (error.response?.status === 403) {
         alert("권한이 없어 로그인창으로 이동합니다.");
@@ -88,10 +84,8 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
             comment={comment}
             postId={postId}
             onUpdate={async () => {
-              const response = await instance.get(
-                `/posts/${postId}/comments?page=${currentPage}&size=10&sort=createdAt,desc`,
-              );
-              setComments(response.data.content);
+              const response = await getComments(postId, currentPage);
+              setComments(response.content);
             }}
           />
         ))}

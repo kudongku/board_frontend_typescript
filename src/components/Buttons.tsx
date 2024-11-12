@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import instance from "@/utils/axios";
+import { deletePost } from "@/api/post";
 
 interface ButtonsProps {
   postId: number;
@@ -10,20 +10,10 @@ const Buttons: React.FC<ButtonsProps> = ({ postId }: ButtonsProps) => {
 
   const handleDeleteClick = async () => {
     try {
-      const response = await instance.delete(`/posts/${postId}`);
-
-      if (response.status === 200) {
-        router.push(`/`);
-      } else {
-        console.error("게시물 삭제 중 오류가 발생했습니다.");
-      }
+      await deletePost(postId);
+      router.push(`/`);
     } catch (error: any) {
-      if (error.response?.status === 403) {
-        alert("권한이 없어 로그인창으로 이동합니다.");
-        router.push("/login");
-      } else {
-        alert(error.response?.data || "알 수 없는 오류가 발생했습니다.");
-      }
+      alert(error.response?.data || "알 수 없는 오류가 발생했습니다.");
     }
   };
 

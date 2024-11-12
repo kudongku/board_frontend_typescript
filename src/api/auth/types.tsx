@@ -1,3 +1,9 @@
+export type SignUpRequest = {
+  username: string;
+  password: string;
+  passwordConfirm: string;
+};
+
 export type LoginRequest = {
   username: string;
   password: string;

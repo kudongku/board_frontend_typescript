@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import instance from "@/utils/axios";
+import { createPost, postFile } from "@/api/post";
 
 const Posting: React.FC = () => {
   const router = useRouter();
@@ -25,27 +25,15 @@ const Posting: React.FC = () => {
       if (file && file.size != 0) {
         const fileFormData = new FormData();
         fileFormData.append("postFile", file);
-        const imageResponse = await instance.post(
-          "/posts/files",
-          fileFormData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        );
-        if (imageResponse.status === 200) {
-          uploadedFileId = imageResponse.data.fileId;
-        }
+        uploadedFileId = await postFile(fileFormData);
       }
 
-      const response = await instance.post("/posts", {
+      await createPost({
         title,
         content,
-        fileId: uploadedFileId,
+        uploadedFileId,
       });
 
-      alert(response.data);
       router.push("/");
     } catch (error: any) {
       if (error.response?.status === 403) {

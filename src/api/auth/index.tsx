@@ -1,6 +1,15 @@
 import instance from "@/utils/axios";
-import { LoginRequest, RefreshRequest, LoginResponse } from "./types";
+import {
+  SignUpRequest,
+  LoginRequest,
+  RefreshRequest,
+  LoginResponse,
+} from "./types";
 
+export const signup = async (signUpRequest: SignUpRequest) => {
+  const response = await instance.post("/users", signUpRequest);
+  return response.data;
+};
 export const login = async (loginRequest: LoginRequest) => {
   const response = await instance.post("/users/login", loginRequest);
   const loginResponse: LoginResponse = response.data;

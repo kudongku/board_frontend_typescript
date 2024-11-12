@@ -2,7 +2,7 @@
 
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import instance from "@/utils/axios";
+import { signup } from "@/api/auth";
 
 const Signup: React.FC = () => {
   const router = useRouter();
@@ -21,8 +21,11 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await instance.post("/users", data);
-      alert(response.data);
+      const response = await signup({
+        username: data.username as string,
+        password: data.password as string,
+        passwordConfirm: data.passwordConfirm as string,
+      });
       router.push(`/login`);
     } catch (error: any) {
       alert(error.response?.data || "회원가입 중 오류가 발생했습니다.");

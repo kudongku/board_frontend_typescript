@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import instance from "@/utils/axios";
-import { PostDetailResponseDto } from "@/types/models";
 import Buttons from "@/components/Buttons";
 import CommentBar from "@/components/CommentBar";
+import { getFile, getPostDetail } from "@/api/post";
+import { FileResponseDto, PostDetailResponseDto } from "@/api/post/types";
 
 interface DetailProps {
   params: {
@@ -23,28 +23,14 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await instance.get<PostDetailResponseDto>(
-          `/posts/${postId}`,
-        );
-        setPost(response.data);
+        const postDetailResponseDto: PostDetailResponseDto =
+          await getPostDetail(postId);
+        setPost(postDetailResponseDto);
 
-        if (response.data.hasFile) {
-          const fileResponse = await instance.get<Blob>(
-            `/posts/${postId}/files`,
-            {
-              responseType: "blob",
-            },
-          );
-
-          const disposition = fileResponse.headers["content-disposition"];
-          const extractedFileName = disposition
-            ? disposition.split("filename=")[1]
-            : "downloaded_file";
-
-          const fileBlob = fileResponse.data;
-          const fileUrl = URL.createObjectURL(fileBlob);
-          setFileUrl(fileUrl);
-          setFileName(extractedFileName);
+        if (postDetailResponseDto.hasFile) {
+          const fileResponseDto: FileResponseDto = await getFile(postId);
+          setFileUrl(fileResponseDto.fileUrl);
+          setFileName(fileResponseDto.fileName);
         }
       } catch (error: any) {
         if (error.response && error.response.status === 403) {

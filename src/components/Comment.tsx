@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import instance from "@/utils/axios";
 import { CommentResponseDto } from "@/types/models";
+import { deleteComment, updateComment } from "@/api/post";
 
 interface CommentProps {
   comment: CommentResponseDto;
@@ -20,17 +21,9 @@ const Comment: React.FC<CommentProps> = ({
 
   const handleEditSubmit = async () => {
     try {
-      const response = await instance.put(
-        `/posts/${postId}/comments/${comment.commentId}`,
-        { content: editText },
-      );
-
-      if (response.status === 200) {
-        onUpdate();
-        setIsEditing(false);
-      } else {
-        alert("댓글 수정 중 오류가 발생했습니다.");
-      }
+      await updateComment(postId, comment.commentId, editText);
+      onUpdate();
+      setIsEditing(false);
     } catch (error: any) {
       if (error.response?.status === 403) {
         alert("권한이 없어 로그인창으로 이동합니다.");
@@ -43,15 +36,8 @@ const Comment: React.FC<CommentProps> = ({
 
   const handleDeleteSubmit = async () => {
     try {
-      const response = await instance.delete(
-        `/posts/${postId}/comments/${comment.commentId}`,
-      );
-
-      if (response.status === 200) {
-        onUpdate();
-      } else {
-        alert("댓글 삭제 중 오류가 발생했습니다.");
-      }
+      const response = deleteComment(postId, comment.commentId);
+      onUpdate();
     } catch (error: any) {
       if (error.response?.status === 403) {
         alert("권한이 없어 로그인창으로 이동합니다.");
