@@ -58,14 +58,14 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
 
       if (imageFile) {
         const imageFormData = new FormData();
-        imageFormData.append("postImage", imageFile);
+        imageFormData.append("postFile", imageFile);
         uploadedFileId = await updateFile(postId, imageFormData);
       }
 
       await updatePost(postId, {
         title,
         content,
-        uploadedFileId,
+        fileId: uploadedFileId,
       });
 
       router.push(`/posts/${postId}`);

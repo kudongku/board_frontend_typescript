@@ -55,7 +55,6 @@ instance.interceptors.response.use(
       if (refreshToken) {
         try {
           const newAccessToken = await refresh({ refreshToken });
-          localStorage.setItem("accessToken", newAccessToken);
 
           if (error.config) {
             error.config.headers.Authorization = `Bearer ${newAccessToken}`;

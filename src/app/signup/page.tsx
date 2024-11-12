@@ -21,7 +21,7 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await signup({
+      await signup({
         username: data.username as string,
         password: data.password as string,
         passwordConfirm: data.passwordConfirm as string,

@@ -31,7 +31,7 @@ const Posting: React.FC = () => {
       await createPost({
         title,
         content,
-        uploadedFileId,
+        fileId: uploadedFileId,
       });
 
       router.push("/");

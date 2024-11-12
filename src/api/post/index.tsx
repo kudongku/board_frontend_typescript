@@ -59,12 +59,11 @@ export const postFile = async (fileFormData: FormData) => {
       "Content-Type": "multipart/form-data",
     },
   });
-
   return imageResponse.data.fileId;
 };
 
 export const updateFile = async (postId: number, imageFormData: FormData) => {
-  const imageResponse = await instance.put<{ fileId: number }>(
+  const imageResponse = await instance.put(
     `/posts/${postId}/files`,
     imageFormData,
     {

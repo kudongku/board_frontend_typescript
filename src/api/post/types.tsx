@@ -21,7 +21,7 @@ export type FileResponseDto = {
 export type PostRequestDto = {
   title: string;
   content: string;
-  uploadedFileId: number | null;
+  fileId: number | null;
 };
 
 export type CommentRequestDto = {
