@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import instance from "@/utils/axios";
-import { CommentResponseDto } from "@/types/models";
-import { deleteComment, updateComment } from "@/api/post";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import instance from '@/utils/axios';
+import { CommentResponseDto } from '@/types/models';
+import { deleteComment, updateComment } from '@/api/post';
 
 interface CommentProps {
   comment: CommentResponseDto;
@@ -26,10 +26,10 @@ const Comment: React.FC<CommentProps> = ({
       setIsEditing(false);
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert("권한이 없어 로그인창으로 이동합니다.");
-        router.push("/login");
+        alert('권한이 없어 로그인창으로 이동합니다.');
+        router.push('/login');
       } else {
-        alert(error.response?.data || "Error updating comment");
+        alert(error.response?.data || 'Error updating comment');
       }
     }
   };
@@ -40,10 +40,10 @@ const Comment: React.FC<CommentProps> = ({
       onUpdate();
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert("권한이 없어 로그인창으로 이동합니다.");
-        router.push("/login");
+        alert('권한이 없어 로그인창으로 이동합니다.');
+        router.push('/login');
       } else {
-        alert(error.response?.data || "Error deleting comment");
+        alert(error.response?.data || 'Error deleting comment');
       }
     }
   };
@@ -55,7 +55,7 @@ const Comment: React.FC<CommentProps> = ({
           <input
             type="text"
             value={editText}
-            onChange={(e) => setEditText(e.target.value)}
+            onChange={e => setEditText(e.target.value)}
             className="w-full p-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, FormEvent } from "react";
-import instance from "@/utils/axios";
-import { useRouter } from "next/navigation";
-import Comment from "./Comment";
-import { CommentResponseDto } from "@/types/models";
-import { createComment, getComments } from "@/api/post";
+import React, { useState, useEffect, FormEvent } from 'react';
+import instance from '@/utils/axios';
+import { useRouter } from 'next/navigation';
+import Comment from './Comment';
+import { CommentResponseDto } from '@/types/models';
+import { createComment, getComments } from '@/api/post';
 
 interface CommentBarProps {
   postId: number;
@@ -23,10 +23,10 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
         setHasNext(!response.last);
       } catch (error: any) {
         if (error.response?.status === 403) {
-          alert("권한이 없어 로그인창으로 이동합니다.");
-          router.push("/login");
+          alert('권한이 없어 로그인창으로 이동합니다.');
+          router.push('/login');
         } else {
-          alert(error.response?.data || "Error fetching comments");
+          alert(error.response?.data || 'Error fetching comments');
         }
       }
     };
@@ -47,10 +47,10 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
       setTimeout(() => window.location.reload(), 0);
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert("권한이 없어 로그인창으로 이동합니다.");
-        router.push("/login");
+        alert('권한이 없어 로그인창으로 이동합니다.');
+        router.push('/login');
       } else {
-        alert(error.response?.data || "Error submitting comment");
+        alert(error.response?.data || 'Error submitting comment');
       }
     }
 
@@ -78,7 +78,7 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
       </form>
 
       <div className="w-full max-w-4xl space-y-4 mt-6">
-        {comments.map((comment) => (
+        {comments.map(comment => (
           <Comment
             key={comment.commentId}
             comment={comment}
@@ -94,7 +94,7 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
       <div className="flex justify-center space-x-2 mt-4">
         {currentPage !== 0 && (
           <button
-            onClick={() => setCurrentPage((prev) => prev - 1)}
+            onClick={() => setCurrentPage(prev => prev - 1)}
             className="px-4 py-2 rounded bg-blue-500 text-white"
           >
             이전
@@ -103,7 +103,7 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
 
         {hasNext && (
           <button
-            onClick={() => setCurrentPage((prev) => prev + 1)}
+            onClick={() => setCurrentPage(prev => prev + 1)}
             className="px-4 py-2 rounded bg-blue-500 text-white"
           >
             다음

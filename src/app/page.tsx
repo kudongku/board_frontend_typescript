@@ -1,11 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useEffect, useState } from "react";
-import { PostListResponseDto } from "@/types/models";
-import PostThumbnail from "@/components/PostThumbnail";
-import Pagination from "@/components/Pagination";
-import { getPosts } from "@/api/post";
+import { useEffect, useState } from 'react';
+import { PostListResponseDto } from '@/types/models';
+import PostThumbnail from '@/components/PostThumbnail';
+import Pagination from '@/components/Pagination';
+import { getPosts } from '@/api/post';
 
 const Home: React.FC = () => {
   const [postList, setPostList] = useState<PostListResponseDto[]>([]);
@@ -22,7 +21,7 @@ const Home: React.FC = () => {
         setPostList(response.content);
         setTotalPages(response.totalPages);
       } catch (error: any) {
-        alert(error.response?.data || "페이지 리스트 조회 중 에러 발생.");
+        alert(error.response?.data || '페이지 리스트 조회 중 에러 발생.');
       }
     };
 
@@ -49,7 +48,7 @@ const Home: React.FC = () => {
   return (
     <div>
       <div className="w-full max-w-4xl space-y-4">
-        {postList.map((postListResponseDto) => (
+        {postList.map(postListResponseDto => (
           <PostThumbnail
             key={postListResponseDto.postId}
             postListResponseDto={postListResponseDto}

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import { login } from "@/api/auth";
-import { LoginRequest } from "@/api/auth/types";
-import Link from "next/link";
+import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { login } from '@/api/auth';
+import { LoginRequest } from '@/api/auth/types';
+import Link from 'next/link';
 
 const Login: React.FC = () => {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,10 +24,10 @@ const Login: React.FC = () => {
 
     try {
       await login(loginRequest);
-      router.push("/");
+      router.push('/');
     } catch (err: any) {
       setError(
-        err.response?.data || "로그인에 실패했습니다. 다시 시도해주세요.",
+        err.response?.data || '로그인에 실패했습니다. 다시 시도해주세요.',
       );
     } finally {
       setLoading(false);
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
             name="username"
             placeholder="ID"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={e => setUsername(e.target.value)}
             required
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
             name="password"
             placeholder="비밀번호"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             required
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -70,9 +70,9 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            {loading ? "로그인 중..." : "로그인"}
+            {loading ? '로그인 중...' : '로그인'}
           </button>
           <Link
             href="/signup"

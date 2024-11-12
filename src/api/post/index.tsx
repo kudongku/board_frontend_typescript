@@ -1,10 +1,10 @@
-import instance from "@/utils/axios";
+import instance from '@/utils/axios';
 import {
   PostDetailResponseDto,
   FileResponseDto,
   PostRequestDto,
   CommentRequestDto,
-} from "./types";
+} from './types';
 
 export const getPosts = async (currentPage: number, postsPerPage: number) => {
   const response = await instance.get(
@@ -12,6 +12,7 @@ export const getPosts = async (currentPage: number, postsPerPage: number) => {
   );
   return response.data;
 };
+
 export const getPostDetail = async (
   postId: number,
 ): Promise<PostDetailResponseDto> => {
@@ -21,7 +22,7 @@ export const getPostDetail = async (
 };
 
 export const createPost = async (postCreateDto: PostRequestDto) => {
-  await instance.post("/posts", postCreateDto);
+  await instance.post('/posts', postCreateDto);
 };
 
 export const updatePost = async (
@@ -37,12 +38,12 @@ export const deletePost = async (postId: number) => {
 
 export const getFile = async (postId: number): Promise<FileResponseDto> => {
   const fileResponse = await instance.get<Blob>(`/posts/${postId}/files`, {
-    responseType: "blob",
+    responseType: 'blob',
   });
-  const disposition = fileResponse.headers["content-disposition"];
+  const disposition = fileResponse.headers['content-disposition'];
   const extractedFileName = disposition
-    ? disposition.split("filename=")[1]
-    : "downloaded_file";
+    ? disposition.split('filename=')[1]
+    : 'downloaded_file';
   const fileBlob = fileResponse.data;
   const fileUrl = URL.createObjectURL(fileBlob);
   const fileResponseDto: FileResponseDto = {
@@ -54,9 +55,9 @@ export const getFile = async (postId: number): Promise<FileResponseDto> => {
 };
 
 export const postFile = async (fileFormData: FormData) => {
-  const imageResponse = await instance.post("/posts/files", fileFormData, {
+  const imageResponse = await instance.post('/posts/files', fileFormData, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      'Content-Type': 'multipart/form-data',
     },
   });
   return imageResponse.data.fileId;
@@ -68,7 +69,7 @@ export const updateFile = async (postId: number, imageFormData: FormData) => {
     imageFormData,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     },
   );

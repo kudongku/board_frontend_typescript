@@ -1,5 +1,5 @@
-import { useRouter } from "next/navigation";
-import { deletePost } from "@/api/post";
+import { useRouter } from 'next/navigation';
+import { deletePost } from '@/api/post';
 
 interface ButtonsProps {
   postId: number;
@@ -13,7 +13,7 @@ const Buttons: React.FC<ButtonsProps> = ({ postId }: ButtonsProps) => {
       await deletePost(postId);
       router.push(`/`);
     } catch (error: any) {
-      alert(error.response?.data || "알 수 없는 오류가 발생했습니다.");
+      alert(error.response?.data || '알 수 없는 오류가 발생했습니다.');
     }
   };
 

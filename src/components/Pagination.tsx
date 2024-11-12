@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface PaginationProps {
   currentPage: number;
@@ -36,10 +36,10 @@ const Pagination: React.FC<PaginationProps> = ({
         <select
           id="postsPerPage"
           value={postsPerPage}
-          onChange={(e) => onPostsPerPageChange(Number(e.target.value))}
+          onChange={e => onPostsPerPageChange(Number(e.target.value))}
           className="px-2 py-1 border rounded"
         >
-          {[5, 10, 20, 30].map((num) => (
+          {[5, 10, 20, 30].map(num => (
             <option key={num} value={num}>
               {num}
             </option>
@@ -57,14 +57,14 @@ const Pagination: React.FC<PaginationProps> = ({
           </button>
         )}
 
-        {getPaginationRange().map((page) => (
+        {getPaginationRange().map(page => (
           <button
             key={page}
             onClick={() => onPageChange(page)}
             className={`px-4 py-2 rounded ${
               currentPage === page
-                ? "bg-blue-700 text-white"
-                : "bg-blue-200 text-gray-700 hover:bg-blue-400"
+                ? 'bg-blue-700 text-white'
+                : 'bg-blue-200 text-gray-700 hover:bg-blue-400'
             }`}
           >
             {page + 1}

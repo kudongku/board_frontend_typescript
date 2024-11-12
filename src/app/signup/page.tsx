@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { FormEvent } from "react";
-import { useRouter } from "next/navigation";
-import { signup } from "@/api/auth";
+import { FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { signup } from '@/api/auth';
 
 const Signup: React.FC = () => {
   const router = useRouter();
@@ -16,7 +16,7 @@ const Signup: React.FC = () => {
     const data = Object.fromEntries(formData);
 
     if (data.password !== data.passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다.");
+      alert('비밀번호가 일치하지 않습니다.');
       return;
     }
 
@@ -28,7 +28,7 @@ const Signup: React.FC = () => {
       });
       router.push(`/login`);
     } catch (error: any) {
-      alert(error.response?.data || "회원가입 중 오류가 발생했습니다.");
+      alert(error.response?.data || '회원가입 중 오류가 발생했습니다.');
     }
   };
 

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Buttons from "@/components/Buttons";
-import CommentBar from "@/components/CommentBar";
-import { getFile, getPostDetail } from "@/api/post";
-import { FileResponseDto, PostDetailResponseDto } from "@/api/post/types";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Buttons from '@/components/Buttons';
+import CommentBar from '@/components/CommentBar';
+import { getFile, getPostDetail } from '@/api/post';
+import { FileResponseDto, PostDetailResponseDto } from '@/api/post/types';
 
 interface DetailProps {
   params: {
@@ -34,10 +34,10 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
         }
       } catch (error: any) {
         if (error.response && error.response.status === 403) {
-          alert("권한이 없어 로그인창으로 이동합니다.");
-          router.push("/login");
+          alert('권한이 없어 로그인창으로 이동합니다.');
+          router.push('/login');
         } else {
-          alert(error.response?.data || "에러가 발생했습니다.");
+          alert(error.response?.data || '에러가 발생했습니다.');
         }
       }
     };
@@ -58,10 +58,10 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
         {fileUrl && (
           <a
             href={fileUrl}
-            download={fileName || "downloaded_file"}
+            download={fileName || 'downloaded_file'}
             className="text-blue-600 underline"
           >
-            {fileName || "파일 다운로드"}
+            {fileName || '파일 다운로드'}
           </a>
         )}
       </div>

@@ -26,6 +26,13 @@
     "@typescript-eslint/semi": "off",
     "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
     "no-useless-catch": "off",
-    "no-console":"off"
+    "no-console":"off",
+    "no-alert":"off"
+  },
+  "lint-staged": {
+    "*.{tsx,ts}": "eslint --fix"
+  },
+  "eslintConfig": {
+    "extends": ["react-app", "airbnb"]
   }
 }
