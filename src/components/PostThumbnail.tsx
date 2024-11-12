@@ -6,16 +6,18 @@ interface PostThumbnailProps {
   postListResponseDto: PostListResponseDto;
 }
 
-const PostThumbnail: React.FC<PostThumbnailProps> = ({
-  postListResponseDto,
-}) => {
+function PostThumbnail({ postListResponseDto }: PostThumbnailProps) {
   const router = useRouter();
   const handleClick = () => {
     router.push(`/posts/${postListResponseDto.postId}`);
   };
 
   return (
-    <div className="p-4 bg-blue-500 text-white" onClick={handleClick}>
+    <div
+      className="p-4 bg-blue-500 text-white"
+      onClick={handleClick}
+      role="presentation"
+    >
       <h2>{postListResponseDto.title}</h2>
       <p>작성자: {postListResponseDto.username}</p>
       <p>
@@ -23,6 +25,6 @@ const PostThumbnail: React.FC<PostThumbnailProps> = ({
       </p>
     </div>
   );
-};
+}
 
 export default PostThumbnail;

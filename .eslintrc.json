@@ -25,6 +25,7 @@
     "react/jsx-props-no-spreading": 0,
     "@typescript-eslint/semi": "off",
     "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
-    "no-useless-catch": "off"
+    "no-useless-catch": "off",
+    "no-console":"off"
   }
 }

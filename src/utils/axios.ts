@@ -18,11 +18,11 @@ instance.interceptors.request.use(
     const token = localStorage.getItem("accessToken");
 
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     if (process.env.NODE_ENV === "development") {
-      console.log("[API] REQUEST " + config.method + " " + config.url);
+      console.log(`[API] REQUEST ${config.method} ${config.url}`);
     }
 
     return config;
@@ -37,27 +37,18 @@ instance.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse => {
     if (process.env.NODE_ENV === "development") {
       console.log(
-        "[API] RESPONSE " +
-          response.config.method +
-          " " +
-          response.config.url +
-          " | " +
-          response.status,
+        `[API] RESPONSE ${response.config.method} ${response.config.url} | ${response.status}`,
       );
     }
     return response;
   },
   async (error: AxiosError) => {
-    console.error(
-      "Response Error:",
-      error.config?.method +
-        " " +
-        error.config?.url +
-        " " +
-        error.response?.data +
-        " " +
-        error.response?.status,
-    );
+    const method = error.config?.method || "";
+    const url = error.config?.url || "";
+    const data = error.response?.data || "";
+    const status = error.response?.status || "";
+
+    console.error(`Response Error: ${method} ${url} ${data} ${status}`);
 
     if (error.response && error.response.status === 403) {
       const refreshToken = localStorage.getItem("refreshToken");
@@ -67,8 +58,8 @@ instance.interceptors.response.use(
           localStorage.setItem("accessToken", newAccessToken);
 
           if (error.config) {
-            error.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
-            return instance(error.config);
+            error.config.headers.Authorization = `Bearer ${newAccessToken}`;
+            return await instance(error.config);
           }
         } catch (refreshError) {
           console.error("Refresh token request failed:", refreshError);
