@@ -3,8 +3,10 @@
 import { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { signup } from '@/api/auth';
+import handleError from '@/utils/errorHandler';
+import { AxiosError } from 'axios';
 
-const Signup: React.FC = () => {
+function Signup() {
   const router = useRouter();
 
   const handleSubmit = async (
@@ -27,8 +29,8 @@ const Signup: React.FC = () => {
         passwordConfirm: data.passwordConfirm as string,
       });
       router.push(`/login`);
-    } catch (error: any) {
-      alert(error.response?.data || '회원가입 중 오류가 발생했습니다.');
+    } catch (error) {
+      handleError(error as AxiosError, router);
     }
   };
 
@@ -75,6 +77,6 @@ const Signup: React.FC = () => {
       </form>
     </div>
   );
-};
+}
 
 export default Signup;

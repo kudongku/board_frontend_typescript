@@ -10,6 +10,7 @@ import {
   updateFile,
   updatePost,
 } from '@/api/post';
+import { AxiosError } from 'axios';
 
 interface EditPageProps {
   params: {
@@ -17,9 +18,9 @@ interface EditPageProps {
   };
 }
 
-const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
+function EditPage({ params }: EditPageProps) {
   const router = useRouter();
-  const postId: number = params.postId;
+  const { postId } = params;
   const [post, setPost] = useState<PostDetailResponseDto | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -38,8 +39,9 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
           setFileUrl(fileResponseDto.fileUrl);
           setFileName(fileResponseDto.fileName);
         }
-      } catch (error: any) {
-        alert(error.response?.data || '에러가 발생했습니다.');
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        alert(axiosError.response?.data || '에러가 발생했습니다.');
       }
     };
 
@@ -69,8 +71,9 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
       });
 
       router.push(`/posts/${postId}`);
-    } catch (error: any) {
-      alert(error.response?.data || '에러가 발생했습니다.');
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      alert(axiosError.response?.data || '에러가 발생했습니다.');
       router.push(`/posts/${postId}`);
     }
   };
@@ -81,8 +84,9 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
       setFileUrl(null);
       setImageFile(null);
       alert('이미지가 삭제되었습니다.');
-    } catch (error: any) {
-      alert(error.response?.data || '에러가 발생했습니다.');
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      alert(axiosError.response?.data || '에러가 발생했습니다.');
       router.push(`/posts/${postId}`);
     }
   };
@@ -110,15 +114,15 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
             className="block text-gray-700 font-medium mb-2"
           >
             제목
+            <input
+              id="title"
+              type="text"
+              name="title"
+              defaultValue={post?.title || ''}
+              required
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </label>
-          <input
-            id="title"
-            type="text"
-            name="title"
-            defaultValue={post?.title || ''}
-            required
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
         </div>
         <div>
           <label
@@ -126,15 +130,15 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
             className="block text-gray-700 font-medium mb-2"
           >
             내용
+            <textarea
+              id="content"
+              name="content"
+              defaultValue={post?.content || ''}
+              required
+              rows={10}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </label>
-          <textarea
-            id="content"
-            name="content"
-            defaultValue={post?.content || ''}
-            required
-            rows={10}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
         </div>
         <div>
           {fileUrl && (
@@ -175,6 +179,6 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
       </form>
     </div>
   );
-};
+}
 
 export default EditPage;

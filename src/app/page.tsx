@@ -5,8 +5,12 @@ import { PostListResponseDto } from '@/types/models';
 import PostThumbnail from '@/components/PostThumbnail';
 import Pagination from '@/components/Pagination';
 import { getPosts } from '@/api/post';
+import handleError from '@/utils/errorHandler';
+import { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 
-const Home: React.FC = () => {
+function Home() {
+  const router = useRouter();
   const [postList, setPostList] = useState<PostListResponseDto[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -20,13 +24,13 @@ const Home: React.FC = () => {
         const response = await getPosts(currentPage, postsPerPage);
         setPostList(response.content);
         setTotalPages(response.totalPages);
-      } catch (error: any) {
-        alert(error.response?.data || '페이지 리스트 조회 중 에러 발생.');
+      } catch (error) {
+        handleError(error as AxiosError, router);
       }
     };
 
     fetchPosts();
-  }, [currentPage, postsPerPage]);
+  }, [currentPage, postsPerPage, router]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -68,6 +72,6 @@ const Home: React.FC = () => {
       />
     </div>
   );
-};
+}
 
 export default Home;

@@ -1,4 +1,4 @@
-import { refresh } from '@/api/auth';
+import { LoginResponse } from '@/api/auth/types';
 import axios, {
   AxiosInstance,
   AxiosError,
@@ -15,17 +15,18 @@ const instance: AxiosInstance = axios.create({
 
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    const newConfig = { ...config };
     const token = localStorage.getItem('accessToken');
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      newConfig.headers.Authorization = `Bearer ${token}`;
     }
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(`[API] REQUEST ${config.method} ${config.url}`);
+      console.log(`[API] REQUEST ${newConfig.method} ${newConfig.url}`);
     }
 
-    return config;
+    return newConfig;
   },
   (error: AxiosError) => {
     console.error('Request Error:', error.message);
@@ -43,6 +44,7 @@ instance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    const newError = { ...error };
     const method = error.config?.method || '';
     const url = error.config?.url || '';
     const data = error.response?.data || '';
@@ -50,15 +52,19 @@ instance.interceptors.response.use(
 
     console.error(`Response Error: ${method} ${url} ${data} ${status}`);
 
-    if (error.response && error.response.status === 403) {
+    if (newError.response && newError.response.status === 403) {
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
         try {
-          const newAccessToken = await refresh({ refreshToken });
+          const response = await instance.post('users/refresh', {
+            refreshToken,
+          });
+          const refreshResponse: LoginResponse = response.data;
+          localStorage.setItem('accessToken', refreshResponse.accessToken);
 
-          if (error.config) {
-            error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-            return await instance(error.config);
+          if (newError.config) {
+            newError.config.headers.Authorization = `Bearer ${refreshResponse.accessToken}`;
+            return await instance(newError.config);
           }
         } catch (refreshError) {
           console.error('Refresh token request failed:', refreshError);
@@ -67,7 +73,7 @@ instance.interceptors.response.use(
       }
     }
 
-    return Promise.reject(error);
+    return Promise.reject(newError);
   },
 );
 

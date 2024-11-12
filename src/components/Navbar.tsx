@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const Navbar: React.FC = ({}) => {
+function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
@@ -36,6 +36,7 @@ const Navbar: React.FC = ({}) => {
           </Link>
 
           <button
+            type="button"
             onClick={handleLogout}
             className="text-xl font-bold hover:text-gray-200"
           >
@@ -49,6 +50,6 @@ const Navbar: React.FC = ({}) => {
       )}
     </div>
   );
-};
+}
 
 export default Navbar;

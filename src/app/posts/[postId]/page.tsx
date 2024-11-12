@@ -6,6 +6,8 @@ import Buttons from '@/components/Buttons';
 import CommentBar from '@/components/CommentBar';
 import { getFile, getPostDetail } from '@/api/post';
 import { FileResponseDto, PostDetailResponseDto } from '@/api/post/types';
+import handleError from '@/utils/errorHandler';
+import { AxiosError } from 'axios';
 
 interface DetailProps {
   params: {
@@ -13,9 +15,9 @@ interface DetailProps {
   };
 }
 
-const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
+function DetailPost({ params }: DetailProps) {
   const router = useRouter();
-  const postId: number = params.postId;
+  const { postId } = params;
   const [post, setPost] = useState<PostDetailResponseDto | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -32,13 +34,8 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
           setFileUrl(fileResponseDto.fileUrl);
           setFileName(fileResponseDto.fileName);
         }
-      } catch (error: any) {
-        if (error.response && error.response.status === 403) {
-          alert('권한이 없어 로그인창으로 이동합니다.');
-          router.push('/login');
-        } else {
-          alert(error.response?.data || '에러가 발생했습니다.');
-        }
+      } catch (error) {
+        handleError(error as AxiosError, router);
       }
     };
 
@@ -70,6 +67,6 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
       <CommentBar postId={postId} />
     </div>
   );
-};
+}
 
 export default DetailPost;

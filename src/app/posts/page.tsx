@@ -3,8 +3,10 @@
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createPost, postFile } from '@/api/post';
+import handleError from '@/utils/errorHandler';
+import { AxiosError } from 'axios';
 
-const Posting: React.FC = () => {
+function Posting() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -35,13 +37,8 @@ const Posting: React.FC = () => {
       });
 
       router.push('/');
-    } catch (error: any) {
-      if (error.response?.status === 403) {
-        alert('권한이 없어 로그인창으로 이동합니다.');
-        router.push('/login');
-      } else {
-        alert(error.response?.data || '에러가 발생했습니다.');
-      }
+    } catch (error) {
+      handleError(error as AxiosError, router);
     } finally {
       setLoading(false);
     }
@@ -89,6 +86,6 @@ const Posting: React.FC = () => {
       </form>
     </div>
   );
-};
+}
 
 export default Posting;

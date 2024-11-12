@@ -1,60 +1,52 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import instance from '@/utils/axios';
-import { useRouter } from 'next/navigation';
-import Comment from './Comment';
+import React, { useState, useEffect, FormEvent, useCallback } from 'react';
 import { CommentResponseDto } from '@/types/models';
 import { createComment, getComments } from '@/api/post';
+import { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
+import handleError from '@/utils/errorHandler';
+import Comment from './Comment';
 
 interface CommentBarProps {
   postId: number;
 }
 
-const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
+function CommentBar({ postId }: CommentBarProps) {
   const router = useRouter();
   const [comments, setComments] = useState<CommentResponseDto[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [hasNext, setHasNext] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
+  const fetchComments = useCallback(
+    async (page: number) => {
       try {
-        const response = await getComments(postId, currentPage);
+        const response = await getComments(postId, page);
         setComments(response.content);
         setHasNext(!response.last);
-      } catch (error: any) {
-        if (error.response?.status === 403) {
-          alert('권한이 없어 로그인창으로 이동합니다.');
-          router.push('/login');
-        } else {
-          alert(error.response?.data || 'Error fetching comments');
-        }
+      } catch (error) {
+        handleError(error as AxiosError, router);
       }
-    };
+    },
+    [postId, router],
+  );
 
-    fetchPosts();
-  }, [postId, currentPage, router]);
+  useEffect(() => {
+    fetchComments(currentPage);
+  }, [fetchComments, currentPage]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
+    event.currentTarget.reset();
 
     try {
-      const response = await createComment(postId, {
-        content: data.content as string,
-      });
-      setTimeout(() => window.location.reload(), 0);
-    } catch (error: any) {
-      if (error.response?.status === 403) {
-        alert('권한이 없어 로그인창으로 이동합니다.');
-        router.push('/login');
-      } else {
-        alert(error.response?.data || 'Error submitting comment');
-      }
+      await createComment(postId, { content: data.content as string });
+      fetchComments(0); // 첫 페이지로 이동하며 최신 댓글 갱신
+      setCurrentPage(0); // 페이지 리셋
+    } catch (error) {
+      handleError(error as AxiosError, router);
     }
-
-    event.currentTarget.reset();
   };
 
   return (
@@ -83,10 +75,7 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
             key={comment.commentId}
             comment={comment}
             postId={postId}
-            onUpdate={async () => {
-              const response = await getComments(postId, currentPage);
-              setComments(response.content);
-            }}
+            onUpdate={() => fetchComments(currentPage)}
           />
         ))}
       </div>
@@ -94,6 +83,7 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
       <div className="flex justify-center space-x-2 mt-4">
         {currentPage !== 0 && (
           <button
+            type="button"
             onClick={() => setCurrentPage(prev => prev - 1)}
             className="px-4 py-2 rounded bg-blue-500 text-white"
           >
@@ -103,6 +93,7 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
 
         {hasNext && (
           <button
+            type="button"
             onClick={() => setCurrentPage(prev => prev + 1)}
             className="px-4 py-2 rounded bg-blue-500 text-white"
           >
@@ -112,6 +103,6 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
       </div>
     </div>
   );
-};
+}
 
 export default CommentBar;

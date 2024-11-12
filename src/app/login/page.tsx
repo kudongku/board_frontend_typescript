@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { login } from '@/api/auth';
 import { LoginRequest } from '@/api/auth/types';
 import Link from 'next/link';
+import { AxiosError } from 'axios';
 
-const Login: React.FC = () => {
+function Login() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,10 +26,9 @@ const Login: React.FC = () => {
     try {
       await login(loginRequest);
       router.push('/');
-    } catch (err: any) {
-      setError(
-        err.response?.data || '로그인에 실패했습니다. 다시 시도해주세요.',
-      );
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      setError(axiosError.response?.data as string);
     } finally {
       setLoading(false);
     }
@@ -84,6 +84,6 @@ const Login: React.FC = () => {
       </form>
     </div>
   );
-};
+}
 
 export default Login;

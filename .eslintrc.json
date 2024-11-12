@@ -15,24 +15,16 @@
   "extends": [
     "airbnb",
     "airbnb-typescript",
-    "next/core-web-vitals",  // next/core-web-vitals에서 react-hooks 규칙을 이미 제공
+    "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
     "prettier"
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/jsx-props-no-spreading": 0,
-    "@typescript-eslint/semi": "off",
     "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
     "no-useless-catch": "off",
-    "no-console":"off",
-    "no-alert":"off"
-  },
-  "lint-staged": {
-    "*.{tsx,ts}": "eslint --fix"
-  },
-  "eslintConfig": {
-    "extends": ["react-app", "airbnb"]
+    "no-console": "off",
+    "no-alert": "off"
   }
 }
