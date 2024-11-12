@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
-import instance from '@/utils/axios';
-import { PostDetailResponseDto } from '@/types/models';
+import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import instance from "@/utils/axios";
+import { PostDetailResponseDto } from "@/types/models";
+import { getFile, getPostDetail } from "@/api/post";
 
 interface EditPageProps {
   params: {
@@ -23,24 +24,16 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await instance.get<PostDetailResponseDto>(
-          `/posts/${postId}`
-        );
-        setPost(response.data);
+        const postDetailResponseDto = await getPostDetail(postId);
+        setPost(postDetailResponseDto);
         setLoading(false);
 
-        if (response.data.hasFile) {
-          const fileResponse = await instance.get<Blob>(
-            `/posts/${postId}/files`,
-            {
-              responseType: 'blob',
-            }
-          );
-
-          const disposition = fileResponse.headers['content-disposition'];
+        if (postDetailResponseDto.hasFile) {
+          const fileResponse = getFile(postId);
+          const disposition = fileResponse.headers["content-disposition"];
           const extractedFileName = disposition
-            ? disposition.split('filename=')[1]
-            : 'downloaded_file';
+            ? disposition.split("filename=")[1]
+            : "downloaded_file";
 
           const fileBlob = fileResponse.data;
           const fileUrl = URL.createObjectURL(fileBlob);
@@ -49,10 +42,10 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
         }
       } catch (error: any) {
         if (error.response?.status === 403) {
-          alert('권한이 없어 로그인창으로 이동합니다.');
-          router.push('/login');
+          alert("권한이 없어 로그인창으로 이동합니다.");
+          router.push("/login");
         } else {
-          alert(error.response?.data || '에러가 발생했습니다.');
+          alert(error.response?.data || "에러가 발생했습니다.");
         }
       }
     };
@@ -64,24 +57,24 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
     event.preventDefault();
     setLoading(true);
     const formData = new FormData(event.currentTarget);
-    const title = formData.get('title') as string;
-    const content = formData.get('content') as string;
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
 
     try {
       let uploadedFileId: number | null = null;
 
       if (imageFile) {
         const imageFormData = new FormData();
-        imageFormData.append('postImage', imageFile);
+        imageFormData.append("postImage", imageFile);
 
         const imageResponse = await instance.put<{ fileId: number }>(
           `/posts/${postId}/files`,
           imageFormData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
 
         if (imageResponse.status === 200) {
@@ -98,10 +91,10 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
       router.push(`/posts/${postId}`);
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert('권한이 없어 로그인창으로 이동합니다.');
-        router.push('/login');
+        alert("권한이 없어 로그인창으로 이동합니다.");
+        router.push("/login");
       } else {
-        alert(error.response?.data || '에러가 발생했습니다.');
+        alert(error.response?.data || "에러가 발생했습니다.");
         router.push(`/posts/${postId}`);
       }
     }
@@ -114,12 +107,12 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
       if (response.status === 200) {
         setFileUrl(null);
         setImageFile(null);
-        alert('이미지가 삭제되었습니다.');
+        alert("이미지가 삭제되었습니다.");
       } else {
-        alert('이미지 삭제 중 오류가 발생했습니다.');
+        alert("이미지 삭제 중 오류가 발생했습니다.");
       }
     } catch (error: any) {
-      alert(error.response?.data || '에러가 발생했습니다.');
+      alert(error.response?.data || "에러가 발생했습니다.");
     }
   };
 
@@ -151,7 +144,7 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
             id="title"
             type="text"
             name="title"
-            defaultValue={post?.title || ''}
+            defaultValue={post?.title || ""}
             required
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -166,7 +159,7 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
           <textarea
             id="content"
             name="content"
-            defaultValue={post?.content || ''}
+            defaultValue={post?.content || ""}
             required
             rows={10}
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -180,7 +173,7 @@ const EditPage: React.FC<EditPageProps> = ({ params }: EditPageProps) => {
                 download={fileName}
                 className="text-blue-600 underline"
               >
-                {fileName || '파일 다운로드'}
+                {fileName || "파일 다운로드"}
               </a>
               <button
                 type="button"

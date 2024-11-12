@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import instance from '@/utils/axios';
-import { PostDetailResponseDto } from '@/types/models';
-import Buttons from '@/components/Buttons';
-import CommentBar from '@/components/CommentBar';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import instance from "@/utils/axios";
+import { PostDetailResponseDto } from "@/types/models";
+import Buttons from "@/components/Buttons";
+import CommentBar from "@/components/CommentBar";
 
 interface DetailProps {
   params: {
@@ -24,7 +24,7 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
     const fetchPosts = async () => {
       try {
         const response = await instance.get<PostDetailResponseDto>(
-          `/posts/${postId}`
+          `/posts/${postId}`,
         );
         setPost(response.data);
 
@@ -32,14 +32,14 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
           const fileResponse = await instance.get<Blob>(
             `/posts/${postId}/files`,
             {
-              responseType: 'blob',
-            }
+              responseType: "blob",
+            },
           );
 
-          const disposition = fileResponse.headers['content-disposition'];
+          const disposition = fileResponse.headers["content-disposition"];
           const extractedFileName = disposition
-            ? disposition.split('filename=')[1]
-            : 'downloaded_file';
+            ? disposition.split("filename=")[1]
+            : "downloaded_file";
 
           const fileBlob = fileResponse.data;
           const fileUrl = URL.createObjectURL(fileBlob);
@@ -48,10 +48,10 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
         }
       } catch (error: any) {
         if (error.response && error.response.status === 403) {
-          alert('권한이 없어 로그인창으로 이동합니다.');
-          router.push('/login');
+          alert("권한이 없어 로그인창으로 이동합니다.");
+          router.push("/login");
         } else {
-          alert(error.response?.data || '에러가 발생했습니다.');
+          alert(error.response?.data || "에러가 발생했습니다.");
         }
       }
     };
@@ -72,10 +72,10 @@ const DetailPost: React.FC<DetailProps> = ({ params }: DetailProps) => {
         {fileUrl && (
           <a
             href={fileUrl}
-            download={fileName || 'downloaded_file'}
+            download={fileName || "downloaded_file"}
             className="text-blue-600 underline"
           >
-            {fileName || '파일 다운로드'}
+            {fileName || "파일 다운로드"}
           </a>
         )}
       </div>

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import instance from '@/utils/axios';
-import { CommentResponseDto } from '@/types/models';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import instance from "@/utils/axios";
+import { CommentResponseDto } from "@/types/models";
 
 interface CommentProps {
   comment: CommentResponseDto;
@@ -22,21 +22,21 @@ const Comment: React.FC<CommentProps> = ({
     try {
       const response = await instance.put(
         `/posts/${postId}/comments/${comment.commentId}`,
-        { content: editText }
+        { content: editText },
       );
 
       if (response.status === 200) {
         onUpdate();
         setIsEditing(false);
       } else {
-        alert('댓글 수정 중 오류가 발생했습니다.');
+        alert("댓글 수정 중 오류가 발생했습니다.");
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert('권한이 없어 로그인창으로 이동합니다.');
-        router.push('/login');
+        alert("권한이 없어 로그인창으로 이동합니다.");
+        router.push("/login");
       } else {
-        alert(error.response?.data || 'Error updating comment');
+        alert(error.response?.data || "Error updating comment");
       }
     }
   };
@@ -44,20 +44,20 @@ const Comment: React.FC<CommentProps> = ({
   const handleDeleteSubmit = async () => {
     try {
       const response = await instance.delete(
-        `/posts/${postId}/comments/${comment.commentId}`
+        `/posts/${postId}/comments/${comment.commentId}`,
       );
 
       if (response.status === 200) {
         onUpdate();
       } else {
-        alert('댓글 삭제 중 오류가 발생했습니다.');
+        alert("댓글 삭제 중 오류가 발생했습니다.");
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert('권한이 없어 로그인창으로 이동합니다.');
-        router.push('/login');
+        alert("권한이 없어 로그인창으로 이동합니다.");
+        router.push("/login");
       } else {
-        alert(error.response?.data || 'Error deleting comment');
+        alert(error.response?.data || "Error deleting comment");
       }
     }
   };

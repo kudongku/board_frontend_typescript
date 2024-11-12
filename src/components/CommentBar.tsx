@@ -1,8 +1,8 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import instance from '@/utils/axios';
-import { useRouter } from 'next/navigation';
-import Comment from './Comment';
-import { CommentResponseDto } from '@/types/models';
+import React, { useState, useEffect, FormEvent } from "react";
+import instance from "@/utils/axios";
+import { useRouter } from "next/navigation";
+import Comment from "./Comment";
+import { CommentResponseDto } from "@/types/models";
 
 interface CommentBarProps {
   postId: number;
@@ -18,16 +18,16 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
     const fetchPosts = async () => {
       try {
         const response = await instance.get(
-          `/posts/${postId}/comments?page=${currentPage}&size=10&sort=createdAt,desc`
+          `/posts/${postId}/comments?page=${currentPage}&size=10&sort=createdAt,desc`,
         );
         setComments(response.data.content);
         setHasNext(!response.data.last);
       } catch (error: any) {
         if (error.response?.status === 403) {
-          alert('권한이 없어 로그인창으로 이동합니다.');
-          router.push('/login');
+          alert("권한이 없어 로그인창으로 이동합니다.");
+          router.push("/login");
         } else {
-          alert(error.response?.data || 'Error fetching comments');
+          alert(error.response?.data || "Error fetching comments");
         }
       }
     };
@@ -47,14 +47,14 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
       if (response.status === 200) {
         setTimeout(() => window.location.reload(), 0);
       } else {
-        console.error('댓글 생성 중 오류가 발생했습니다.');
+        console.error("댓글 생성 중 오류가 발생했습니다.");
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert('권한이 없어 로그인창으로 이동합니다.');
-        router.push('/login');
+        alert("권한이 없어 로그인창으로 이동합니다.");
+        router.push("/login");
       } else {
-        alert(error.response?.data || 'Error submitting comment');
+        alert(error.response?.data || "Error submitting comment");
       }
     }
 
@@ -89,7 +89,7 @@ const CommentBar: React.FC<CommentBarProps> = ({ postId }: CommentBarProps) => {
             postId={postId}
             onUpdate={async () => {
               const response = await instance.get(
-                `/posts/${postId}/comments?page=${currentPage}&size=10&sort=createdAt,desc`
+                `/posts/${postId}/comments?page=${currentPage}&size=10&sort=createdAt,desc`,
               );
               setComments(response.data.content);
             }}

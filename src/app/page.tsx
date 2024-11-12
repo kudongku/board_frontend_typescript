@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useEffect, useState } from 'react';
-import instance from '../utils/axios';
-import { PostListResponseDto } from '@/types/models';
-import PostThumbnail from '@/components/PostThumbnail';
-import Pagination from '@/components/Pagination';
+import React from "react";
+import { useEffect, useState } from "react";
+import instance from "../utils/axios";
+import { PostListResponseDto } from "@/types/models";
+import PostThumbnail from "@/components/PostThumbnail";
+import Pagination from "@/components/Pagination";
 
 const Home: React.FC = () => {
   const [postList, setPostList] = useState<PostListResponseDto[]>([]);
@@ -19,12 +19,12 @@ const Home: React.FC = () => {
     const fetchPosts = async () => {
       try {
         const response = await instance.get(
-          `/posts?page=${currentPage}&size=${postsPerPage}&sort=createdAt,desc`
+          `/posts?page=${currentPage}&size=${postsPerPage}&sort=createdAt,desc`,
         );
         setPostList(response.data.content);
         setTotalPages(response.data.totalPages);
       } catch (error: any) {
-        alert(error.response?.data || '페이지 리스트 조회 중 에러 발생.');
+        alert(error.response?.data || "페이지 리스트 조회 중 에러 발생.");
       }
     };
 

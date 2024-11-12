@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface PaginationProps {
   currentPage: number;
@@ -63,8 +63,8 @@ const Pagination: React.FC<PaginationProps> = ({
             onClick={() => onPageChange(page)}
             className={`px-4 py-2 rounded ${
               currentPage === page
-                ? 'bg-blue-700 text-white'
-                : 'bg-blue-200 text-gray-700 hover:bg-blue-400'
+                ? "bg-blue-700 text-white"
+                : "bg-blue-200 text-gray-700 hover:bg-blue-400"
             }`}
           >
             {page + 1}

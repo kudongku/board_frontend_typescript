@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const Navbar: React.FC = ({}) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('bearerToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
       setIsLoggedIn(true);
     }
   }, []);
 
   const handleLogout = (): void => {
-    localStorage.removeItem('bearerToken');
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     setIsLoggedIn(false);
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   return (

@@ -1,6 +1,6 @@
-import { PostListResponseDto } from '@/types/models';
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import { PostListResponseDto } from "@/types/models";
+import React from "react";
+import { useRouter } from "next/navigation";
 
 interface PostThumbnailProps {
   postListResponseDto: PostListResponseDto;
