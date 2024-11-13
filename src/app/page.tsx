@@ -6,8 +6,8 @@ import { getPosts } from '@/api/post';
 import handleError from '@/utils/errorHandler';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import PostThumbnail from '@/components/posting/PostThumbnail';
-import { PostDto, PostListResponseDto } from '@/api/post/types';
+import { PostDto } from '@/api/post/types';
+import PostList from '@/components/posting/PostList';
 
 function Home() {
   const router = useRouter();
@@ -21,10 +21,7 @@ function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const postListResponseDto: PostListResponseDto = await getPosts(
-          currentPage,
-          postsPerPage,
-        );
+        const postListResponseDto = await getPosts(currentPage, postsPerPage);
         setPostList(postListResponseDto.postList);
         setTotalPages(postListResponseDto.totalPages);
       } catch (error) {
@@ -54,15 +51,7 @@ function Home() {
 
   return (
     <div>
-      <div className="w-full max-w-4xl space-y-4">
-        {postList.map(postListResponseDto => (
-          <PostThumbnail
-            key={postListResponseDto.postId}
-            postListResponseDto={postListResponseDto}
-          />
-        ))}
-      </div>
-
+      <PostList postList={postList} />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
