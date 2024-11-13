@@ -1,9 +1,9 @@
 import React, { useState, useEffect, FormEvent, useCallback } from 'react';
-import { CommentResponseDto } from '@/types/models';
 import { createComment, getComments } from '@/api/post';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import handleError from '@/utils/errorHandler';
+import { CommentResponseDto } from '@/api/post/types';
 import Comment from './Comment';
 
 interface CommentBarProps {

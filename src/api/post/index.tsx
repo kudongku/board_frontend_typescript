@@ -4,13 +4,21 @@ import {
   FileResponseDto,
   PostRequestDto,
   CommentRequestDto,
+  PostListResponseDto,
 } from './types';
 
-export const getPosts = async (currentPage: number, postsPerPage: number) => {
+export const getPosts = async (
+  currentPage: number,
+  postsPerPage: number,
+): Promise<PostListResponseDto> => {
   const response = await instance.get(
     `/posts?page=${currentPage}&size=${postsPerPage}&sort=createdAt,desc`,
   );
-  return response.data;
+  const postListResponseDto: PostListResponseDto = {
+    postList: response.data.content,
+    totalPages: response.data.totalPages,
+  };
+  return postListResponseDto;
 };
 
 export const getPostDetail = async (

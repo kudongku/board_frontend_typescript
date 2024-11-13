@@ -1,9 +1,9 @@
-import { PostListResponseDto } from '@/types/models';
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { PostDto } from '@/api/post/types';
 
 interface PostThumbnailProps {
-  postListResponseDto: PostListResponseDto;
+  postListResponseDto: PostDto;
 }
 
 function PostThumbnail({ postListResponseDto }: PostThumbnailProps) {

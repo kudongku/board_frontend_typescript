@@ -1,8 +1,13 @@
-export type PostListResponseDto = {
+export type PostDto = {
   postId: number;
   title: string;
   username: string;
   createdAt: string;
+};
+
+export type PostListResponseDto = {
+  postList: PostDto[];
+  totalPages: number;
 };
 
 export type PostDetailResponseDto = {
@@ -26,4 +31,10 @@ export type PostRequestDto = {
 
 export type CommentRequestDto = {
   content: string;
+};
+
+export type CommentResponseDto = {
+  commentId: number;
+  content: string;
+  writerUsername: string;
 };

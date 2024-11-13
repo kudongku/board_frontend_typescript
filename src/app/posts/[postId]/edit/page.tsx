@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { PostDetailResponseDto } from '@/types/models';
 import {
   deleteFile,
   getFile,
@@ -11,6 +10,7 @@ import {
   updatePost,
 } from '@/api/post';
 import { AxiosError } from 'axios';
+import { PostDetailResponseDto } from '@/api/post/types';
 
 interface EditPageProps {
   params: {
