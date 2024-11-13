@@ -11,11 +11,11 @@ export const signup = async (signUpRequest: SignUpRequest) => {
   return response.data;
 };
 
-export const login = async (loginRequest: LoginRequest) => {
+export const login = async (
+  loginRequest: LoginRequest,
+): Promise<LoginResponse> => {
   const response = await instance.post('/users/login', loginRequest);
-  const loginResponse: LoginResponse = response.data;
-  localStorage.setItem('accessToken', loginResponse.accessToken);
-  localStorage.setItem('refreshToken', loginResponse.refreshToken);
+  return response.data;
 };
 
 export const refresh = async (refreshRequest: RefreshRequest) => {

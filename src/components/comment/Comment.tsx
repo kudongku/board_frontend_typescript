@@ -4,6 +4,7 @@ import handleError from '@/utils/errorHandler';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { CommentResponseDto } from '@/api/post/types';
+import { useAuth } from '@/provider/contexts/authContext';
 
 interface CommentProps {
   comment: CommentResponseDto;
@@ -13,6 +14,7 @@ interface CommentProps {
 
 function Comment({ comment, postId, onUpdate }: CommentProps) {
   const router = useRouter();
+  const { currentUsername } = useAuth();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editText, setEditText] = useState<string>(comment.content);
 
@@ -59,22 +61,24 @@ function Comment({ comment, postId, onUpdate }: CommentProps) {
             <div className="text-xl font-bold text-black-700">
               {comment.content}
             </div>
-            <div className="flex space-x-2">
-              <button
-                type="button"
-                onClick={() => setIsEditing(true)}
-                className="px-2 py-1 bg-blue-300 text-white font-semibold rounded-lg hover:bg-yellow-600 transition duration-300"
-              >
-                ✍️
-              </button>
-              <button
-                type="button"
-                onClick={handleDeleteSubmit}
-                className="px-2 py-1 bg-red-300 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300"
-              >
-                🗑️
-              </button>
-            </div>
+            {currentUsername === comment.writerUsername && (
+              <div className="flex space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="px-2 py-1 bg-blue-300 text-white font-semibold rounded-lg hover:bg-yellow-600 transition duration-300"
+                >
+                  ✍️
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteSubmit}
+                  className="px-2 py-1 bg-red-300 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300"
+                >
+                  🗑️
+                </button>
+              </div>
+            )}
           </div>
           <div className="mt-1 text-sm text-gray-500">
             {comment.writerUsername}

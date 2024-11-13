@@ -13,6 +13,7 @@ export type LoginResponse = {
   accessToken: string;
   refreshToken: string;
   tokenType: 'bearer';
+  username: string;
 };
 
 export type RefreshRequest = {

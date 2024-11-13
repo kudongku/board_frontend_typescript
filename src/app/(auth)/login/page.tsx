@@ -6,9 +6,11 @@ import { login } from '@/api/auth';
 import { LoginRequest } from '@/api/auth/types';
 import Link from 'next/link';
 import { AxiosError } from 'axios';
+import { useAuth } from '@/provider/contexts/authContext';
 
 function Login() {
   const router = useRouter();
+  const { loginState } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,7 +26,8 @@ function Login() {
     const loginRequest: LoginRequest = { username, password };
 
     try {
-      await login(loginRequest);
+      const loginResponse = await login(loginRequest);
+      loginState(loginResponse);
       router.push('/');
     } catch (err) {
       const axiosError = err as AxiosError;
