@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Navbar from '@/components/Navbar';
 import MobileLayout from '@/components/MobileLayout';
+import Providers from '@/provider/Provider';
 
 export const metadata: Metadata = {
   title: 'Board',
@@ -14,9 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <MobileLayout>
-      <Navbar />
-      {children}
-    </MobileLayout>
+    <Providers>
+      <MobileLayout>
+        <Navbar />
+        {children}
+      </MobileLayout>
+    </Providers>
   );
 }

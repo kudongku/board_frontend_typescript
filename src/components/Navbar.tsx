@@ -1,24 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/provider/contexts/authContext';
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const handleLogout = (): void => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    setIsLoggedIn(false);
-    window.location.href = '/';
-  };
+  const { isLoggedIn, logoutState } = useAuth();
 
   return (
     <div className="container mx-auto px-4 py-2 flex justify-start items-center">
@@ -37,7 +23,7 @@ function Navbar() {
 
           <button
             type="button"
-            onClick={handleLogout}
+            onClick={logoutState}
             className="text-xl font-bold hover:text-gray-200"
           >
             로그아웃
