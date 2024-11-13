@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Buttons from '@/components/Buttons';
-import CommentBar from '@/components/CommentBar';
+import CommentBar from '@/components/comment/CommentBar';
 import { getFile, getPostDetail } from '@/api/post';
 import { FileResponseDto, PostDetailResponseDto } from '@/api/post/types';
 import handleError from '@/utils/errorHandler';

@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { PostListResponseDto } from '@/types/models';
-import PostThumbnail from '@/components/PostThumbnail';
 import Pagination from '@/components/Pagination';
 import { getPosts } from '@/api/post';
 import handleError from '@/utils/errorHandler';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import PostThumbnail from '@/components/posting/PostThumbnail';
 
 function Home() {
   const router = useRouter();
