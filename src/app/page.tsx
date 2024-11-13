@@ -16,7 +16,7 @@ function Home() {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [postsPerPage, setPostsPerPage] = useState<number>(10);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
-  const pagesPerGroup = 10;
+  const pagesPerGroup = 5;
 
   useEffect(() => {
     const fetchPosts = async () => {

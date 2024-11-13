@@ -6,7 +6,7 @@ interface MobileLayoutProps {
 
 function MobileLayout({ children }: MobileLayoutProps) {
   return (
-    <div className="max-w-[700px] mx-auto h-screen overflow-y-auto">
+    <div className="max-w-[500px] mx-auto h-screen overflow-y-auto">
       {children}
     </div>
   );
