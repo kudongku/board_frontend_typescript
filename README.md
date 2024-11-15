@@ -1,3 +1,10 @@
+### docker image => container
+
+```bash
+docker build -t board-front .
+docker run -p 3000:3000 --name board-front-container --network docker-network  -d board-front
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
