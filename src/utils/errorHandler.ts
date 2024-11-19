@@ -6,7 +6,8 @@ const handleError = (error: AxiosError, router: AppRouterInstance) => {
     alert('권한이 없어 로그인창으로 이동합니다.');
     router.push('/login');
   } else {
-    alert(error.response?.data || 'Error submitting comment');
+    console.log(error);
+    alert(error.response?.data);
   }
 };
 
