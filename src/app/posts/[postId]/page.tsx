@@ -45,27 +45,33 @@ function DetailPost({ params }: DetailProps) {
   }, [postId, router]);
 
   if (!post) {
-    return <p className="text-center text-gray-500">Loading...</p>;
+    return (
+      <p className="text-center text-gray-500 dark:text-gray-300">Loading...</p>
+    );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-      <p className="text-gray-700 mb-4">작성자: {post.username}</p>
+    <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+      <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+        {post.title}
+      </h1>
+      <p className="text-gray-700 mb-4 dark:text-gray-300">
+        작성자: {post.username}
+      </p>
       {currentUsername === post.username && <Buttons postId={postId} />}
       <div>
         {fileUrl && (
           <a
             href={fileUrl}
             download={fileName || 'downloaded_file'}
-            className="text-blue-600 underline"
+            className="text-blue-600 underline dark:text-blue-400"
           >
             {fileName || '파일 다운로드'}
           </a>
         )}
       </div>
-      <p className="text-gray-800 mt-4">{post.content}</p>
-      <hr className="my-6 border-gray-300" />
+      <p className="text-gray-800 mt-4 dark:text-gray-100">{post.content}</p>
+      <hr className="my-6 border-gray-300 dark:border-gray-700" />
       <CommentBar postId={postId} />
     </div>
   );

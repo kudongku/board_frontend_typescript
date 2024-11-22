@@ -38,14 +38,14 @@ function Comment({ comment, postId, onUpdate }: CommentProps) {
   };
 
   return (
-    <div className="p-4 border border-gray-300 rounded-lg shadow-lg">
+    <div className="p-4 border border-gray-300 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-600">
       {isEditing ? (
         <>
           <input
             type="text"
             value={editText}
             onChange={e => setEditText(e.target.value)}
-            className="w-full p-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
           />
           <button
             type="button"
@@ -58,7 +58,7 @@ function Comment({ comment, postId, onUpdate }: CommentProps) {
       ) : (
         <>
           <div className="flex items-center justify-between">
-            <div className="text-xl font-bold text-black-700">
+            <div className="text-xl font-bold text-gray-900 dark:text-gray-100">
               {comment.content}
             </div>
             {currentUsername === comment.writerUsername && (
@@ -66,6 +66,7 @@ function Comment({ comment, postId, onUpdate }: CommentProps) {
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
+                  aria-label="Edit comment"
                   className="px-2 py-1 bg-blue-300 text-white font-semibold rounded-lg hover:bg-yellow-600 transition duration-300"
                 >
                   ✍️
@@ -73,6 +74,7 @@ function Comment({ comment, postId, onUpdate }: CommentProps) {
                 <button
                   type="button"
                   onClick={handleDeleteSubmit}
+                  aria-label="Delete comment"
                   className="px-2 py-1 bg-red-300 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300"
                 >
                   🗑️
@@ -80,7 +82,7 @@ function Comment({ comment, postId, onUpdate }: CommentProps) {
               </div>
             )}
           </div>
-          <div className="mt-1 text-sm text-gray-500">
+          <div className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {comment.writerUsername}
           </div>
         </>

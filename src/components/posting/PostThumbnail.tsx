@@ -14,7 +14,7 @@ function PostThumbnail({ postListResponseDto }: PostThumbnailProps) {
 
   return (
     <div
-      className="p-4 bg-blue-500 text-white"
+      className="p-4 bg-blue-500 text-white rounded-lg"
       onClick={handleClick}
       role="presentation"
     >
