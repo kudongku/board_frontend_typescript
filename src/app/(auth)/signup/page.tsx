@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { signup } from '@/api/auth';
 import handleError from '@/utils/errorHandler';
 import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 function Signup() {
   const router = useRouter();
@@ -18,7 +19,7 @@ function Signup() {
     const data = Object.fromEntries(formData);
 
     if (data.password !== data.passwordConfirm) {
-      alert('비밀번호가 일치하지 않습니다.');
+      toast('비밀번호가 일치하지 않습니다.');
       return;
     }
 

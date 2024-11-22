@@ -3,6 +3,8 @@ import '../styles/globals.css';
 import Navbar from '@/components/Navbar';
 import MobileLayout from '@/components/MobileLayout';
 import Providers from '@/provider/Provider';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
   title: 'Board',
@@ -18,6 +20,7 @@ export default function RootLayout({
     <Providers>
       <MobileLayout>
         <Navbar />
+        <ToastContainer position="top-center" limit={3} />
         {children}
       </MobileLayout>
     </Providers>

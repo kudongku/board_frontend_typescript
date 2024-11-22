@@ -24,7 +24,6 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
     "no-useless-catch": "off",
-    "no-console": "off",
-    "no-alert": "off"
+    "no-console": "off"
   }
 }

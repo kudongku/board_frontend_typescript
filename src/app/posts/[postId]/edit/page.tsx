@@ -11,6 +11,8 @@ import {
 } from '@/api/post';
 import { AxiosError } from 'axios';
 import { PostDetailResponseDto } from '@/api/post/types';
+import handleError from '@/utils/errorHandler';
+import { toast } from 'react-toastify';
 
 interface EditPageProps {
   params: {
@@ -40,8 +42,7 @@ function EditPage({ params }: EditPageProps) {
           setFileName(fileResponseDto.fileName);
         }
       } catch (error) {
-        const axiosError = error as AxiosError;
-        alert(axiosError.response?.data || '에러가 발생했습니다.');
+        handleError(error as AxiosError, router);
       }
     };
 
@@ -72,8 +73,7 @@ function EditPage({ params }: EditPageProps) {
 
       router.push(`/posts/${postId}`);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      alert(axiosError.response?.data || '에러가 발생했습니다.');
+      handleError(error as AxiosError, router);
       router.push(`/posts/${postId}`);
     }
   };
@@ -83,10 +83,9 @@ function EditPage({ params }: EditPageProps) {
       await deleteFile(postId);
       setFileUrl(null);
       setImageFile(null);
-      alert('이미지가 삭제되었습니다.');
+      toast('이미지가 삭제되었습니다.');
     } catch (error) {
-      const axiosError = error as AxiosError;
-      alert(axiosError.response?.data || '에러가 발생했습니다.');
+      handleError(error as AxiosError, router);
       router.push(`/posts/${postId}`);
     }
   };
