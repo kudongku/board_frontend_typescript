@@ -1,4 +1,10 @@
-import React, { useState, useEffect, FormEvent, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  FormEvent,
+  useCallback,
+  useRef,
+} from 'react';
 import { createComment, getComments } from '@/api/post';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
@@ -15,8 +21,9 @@ function CommentBar({ postId }: CommentBarProps) {
   const [comments, setComments] = useState<CommentResponseDto[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [hasNext, setHasNext] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state for UX
-  const [content, setContent] = useState<string>(''); // Track content for controlled input
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [content, setContent] = useState<string>('');
+  const socketRef = useRef<WebSocket | null>(null); // WebSocket 연결 객체
 
   const fetchComments = useCallback(
     async (page: number) => {
@@ -38,15 +45,49 @@ function CommentBar({ postId }: CommentBarProps) {
     fetchComments(currentPage);
   }, [fetchComments, currentPage]);
 
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    const socketUrl = `ws://localhost:8080/comments?postId=${postId}&token=${token}`;
+    const socket = new WebSocket(socketUrl);
+    socketRef.current = socket;
+
+    socket.onopen = () => {
+      console.log('web socket open');
+    };
+
+    socket.onmessage = event => {
+      console.log('web socket on message');
+      const newComment: CommentResponseDto = JSON.parse(event.data);
+      setComments(prevComments => [newComment, ...prevComments]);
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket closed');
+    };
+
+    socket.onerror = error => {
+      console.error('WebSocket error:', error);
+    };
+
+    return () => {
+      socket.close(); // 컴포넌트 언마운트 시 WebSocket 닫기
+    };
+  }, [postId]);
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!content.trim()) return; // Prevent empty submissions
+    if (!content.trim()) return;
 
     try {
       await createComment(postId, { content });
-      setContent(''); // Reset content after submission
-      setCurrentPage(0); // Reset to the first page
-      fetchComments(0); // Fetch the latest comments
+      setContent('');
+
+      if (
+        socketRef.current &&
+        socketRef.current.readyState === WebSocket.OPEN
+      ) {
+        socketRef.current.send(content);
+      }
     } catch (error) {
       handleError(error as AxiosError, router);
     }
