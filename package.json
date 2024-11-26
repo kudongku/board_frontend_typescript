@@ -10,6 +10,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "axios": "^1.7.7",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
@@ -17,12 +18,14 @@
     "next": "14.2.10",
     "react": "^18",
     "react-dom": "^18",
-    "react-toastify": "^10.0.6"
+    "react-toastify": "^10.0.6",
+    "sockjs-client": "^1.6.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/sockjs-client": "^1.5.4",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "babel-eslint": "^10.1.0",

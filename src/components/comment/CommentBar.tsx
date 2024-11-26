@@ -5,11 +5,13 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import { createComment, getComments } from '@/api/post';
+import { getComments } from '@/api/post';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import handleError from '@/utils/errorHandler';
 import { CommentResponseDto } from '@/api/post/types';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 import Comment from './Comment';
 
 interface CommentBarProps {
@@ -23,7 +25,7 @@ function CommentBar({ postId }: CommentBarProps) {
   const [hasNext, setHasNext] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
-  const socketRef = useRef<WebSocket | null>(null); // WebSocket 연결 객체
+  const stompClientRef = useRef<Stomp.Client | null>(null);
 
   const fetchComments = useCallback(
     async (page: number) => {
@@ -47,30 +49,30 @@ function CommentBar({ postId }: CommentBarProps) {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    const socketUrl = `ws://localhost:8080/comments?postId=${postId}&token=${token}`;
-    const socket = new WebSocket(socketUrl);
-    socketRef.current = socket;
+    if (!token) {
+      console.error('No token found!');
+      return;
+    }
 
-    socket.onopen = () => {
-      console.log('web socket open');
-    };
+    const socket = new SockJS('http://localhost:8080/stomp/comments');
+    const stompClient = Stomp.over(socket);
+    stompClientRef.current = stompClient;
 
-    socket.onmessage = event => {
-      console.log('web socket on message');
-      const newComment: CommentResponseDto = JSON.parse(event.data);
-      setComments(prevComments => [newComment, ...prevComments]);
-    };
+    stompClient.connect({ token }, () => {
+      console.log('STOMP connected');
 
-    socket.onclose = () => {
-      console.log('WebSocket closed');
-    };
+      // Post-specific subscription
+      stompClient.subscribe(`/sub/posts/${postId}/comments`, message => {
+        const newComment: CommentResponseDto = JSON.parse(message.body);
+        setComments(prevComments => [newComment, ...prevComments]);
+      });
+    });
 
-    socket.onerror = error => {
-      console.error('WebSocket error:', error);
-    };
-
+    // eslint-disable-next-line consistent-return
     return () => {
-      socket.close(); // 컴포넌트 언마운트 시 WebSocket 닫기
+      stompClient.disconnect(() => {
+        console.log('STOMP disconnected');
+      });
     };
   }, [postId]);
 
@@ -79,14 +81,18 @@ function CommentBar({ postId }: CommentBarProps) {
     if (!content.trim()) return;
 
     try {
-      await createComment(postId, { content });
-      setContent('');
+      const token = localStorage.getItem('accessToken');
+      if (!token) throw new Error('No token available');
 
-      if (
-        socketRef.current &&
-        socketRef.current.readyState === WebSocket.OPEN
-      ) {
-        socketRef.current.send(content);
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.send(
+          `/pub/posts/${postId}/comments`,
+          { token },
+          JSON.stringify({ content }),
+        );
+        setContent('');
+      } else {
+        console.error('STOMP client not connected');
       }
     } catch (error) {
       handleError(error as AxiosError, router);
