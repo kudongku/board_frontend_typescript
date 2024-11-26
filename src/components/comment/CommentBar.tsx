@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import handleError from '@/utils/errorHandler';
 import { CommentResponseDto } from '@/api/post/types';
 import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
+import { CompatClient, Stomp } from '@stomp/stompjs';
 import Comment from './Comment';
 
 interface CommentBarProps {
@@ -25,7 +25,7 @@ function CommentBar({ postId }: CommentBarProps) {
   const [hasNext, setHasNext] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
-  const stompClientRef = useRef<Stomp.Client | null>(null);
+  const stompClientRef = useRef<CompatClient>();
 
   const fetchComments = useCallback(
     async (page: number) => {
@@ -54,14 +54,14 @@ function CommentBar({ postId }: CommentBarProps) {
       return;
     }
 
-    const socket = new SockJS('http://localhost:8080/stomp/comments');
-    const stompClient = Stomp.over(socket);
+    // Connect
+    const stompClient = Stomp.over(
+      new SockJS(`${process.env.NEXT_PUBLIC_API_BASE_URL}/stomp/comments`),
+    );
     stompClientRef.current = stompClient;
 
     stompClient.connect({ token }, () => {
-      console.log('STOMP connected');
-
-      // Post-specific subscription
+      // Subscribe
       stompClient.subscribe(`/sub/posts/${postId}/comments`, message => {
         const newComment: CommentResponseDto = JSON.parse(message.body);
         setComments(prevComments => [newComment, ...prevComments]);
